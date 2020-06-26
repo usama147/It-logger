@@ -1,0 +1,47 @@
+{
+  "logs": [
+    {
+      "message": "Repaired Hard drive at workstation 002",
+      "attention": false,
+      "tech": "John Doe",
+      "date": "2020-06-25T08:49:04.427Z",
+      "id": 1
+    },
+    {
+      "message": "Updated all system Operating systems",
+      "attention": false,
+      "tech": "Sam Smith",
+      "date": "2020-06-25T08:49:38.816Z",
+      "id": 2
+    },
+    {
+      "message": "Repaired Motherboard at workstation 014",
+      "attention": true,
+      "tech": "Sara Wilson",
+      "date": "2020-06-25T08:50:14.881Z",
+      "id": 3
+    }
+  ],
+  "techs": [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    {
+      "id": 2,
+      "firstName": "Sam",
+      "lastName": "Smith"
+    },
+    {
+      "id": 3,
+      "firstName": "Sara",
+      "lastName": "Wilson"
+    },
+    {
+      "firstName": "Usama",
+      "lastName": "Gierdien",
+      "id": 4
+    }
+  ]
+}

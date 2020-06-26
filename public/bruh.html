@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hail &#x1F525;</title>
+    <style>
+      h1 {
+        font-family: fantasy;
+      }
+      body {
+        background: rgba(1, 10, 12, 1);
+      }
+      canvas {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <audio autoplay loop src="666.mp3"></audio>
+    <div>
+      <h1>Bra why'd you click there!?</h1>
+    </div>
+  </body>
+  <script>
+    let Pix = (function (doc) {
+      const GLYPH_SEQ = ["10", "38", "54", "92", "111", "38", "10"];
+
+      const GLYPHS = {
+        a: "BD",
+        b: "1BF",
+        c: "1E7",
+        d: "1AE",
+        e: "1F7",
+        f: "1F4",
+        g: "1AF",
+        h: "17D",
+        i: "1D7",
+        j: "6F",
+        k: "175",
+        l: "127",
+        m: "1FD",
+        n: "1ED",
+        o: "1EF",
+        p: "1FC",
+        q: "1F9",
+        r: "1E4",
+        s: "D6",
+        t: "1D2",
+        u: "16F",
+        v: "16A",
+        w: "17F",
+        x: "155",
+        y: "152",
+        z: "193",
+        "0": "1EF",
+        "1": "197",
+        "2": "193",
+        "3": "1DF",
+        "4": "179",
+        "5": "D6",
+        "6": "13F",
+        "7": "1C9",
+        "8": "FF",
+        "9": "1F9",
+        ".": "2",
+      };
+
+      const WIDTH = 500;
+      const HEIGHT = 35;
+      const PIXEL_SIZE = 10;
+      const SPACING = 10;
+      const STROKE_COLOR = "#7350B1";
+      const FONT_COLOR = "#5A359B";
+
+      let canvas = doc.createElement("canvas");
+      canvas.width = WIDTH;
+      canvas.height = HEIGHT;
+      let ctx = canvas.getContext("2d");
+      document.body.appendChild(canvas);
+
+      let colorIdx = 0;
+      function render(xOffset, glyph, shadowBlur) {
+        let bin = parseInt(glyph, 16).toString(2);
+        bin = Array(10).join("0").substr(bin.length) + bin;
+        for (let i = 0; i < bin.length; i++) {
+          if (bin[i] === "1") {
+            if (shadowBlur) {
+              ctx.shadowBlur = shadowBlur;
+              ctx.shadowColor = FONT_COLOR;
+            }
+
+            let x = xOffset + (i % 3) * PIXEL_SIZE;
+            let y = ~~(i / 3) * PIXEL_SIZE;
+            ctx.fillStyle = STROKE_COLOR;
+            ctx.fillRect(x + 1, y + 1, PIXEL_SIZE, PIXEL_SIZE);
+            ctx.fillStyle = FONT_COLOR;
+            ctx.fillRect(x, y, PIXEL_SIZE, PIXEL_SIZE);
+          }
+        }
+      }
+
+      function clear(opacity) {
+        if (opacity != undefined) {
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "rgba(1, 10, 12," + opacity + ")";
+          ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        } else {
+          ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        }
+      }
+
+      function getOffset(position) {
+        return position * (3 * PIXEL_SIZE + SPACING);
+      }
+
+      function setText(str) {
+        clear();
+        str = str.toLowerCase();
+        for (let i = 0; i < str.length; i++) {
+          let glyph = GLYPHS[str[i]];
+          render(getOffset(i), glyph, FONT_COLOR);
+        }
+      }
+
+      function animStr(str, timeTable) {
+        let step = 1 / 60;
+        let time = Math.max.apply(null, timeTable);
+        let idx = 0;
+        let intervalId = setInterval(function () {
+          clear(0.25);
+          for (var i = 0; i < timeTable.length; i++) {
+            if (timeTable[i] > 0) {
+              timeTable[i] -= step;
+              let idx = ~~((time + i * 4) * 25);
+              let glyph = GLYPH_SEQ[Math.round(idx) % GLYPH_SEQ.length];
+              render(getOffset(i), glyph, time * 6);
+            } else {
+              render(getOffset(i), GLYPHS[str[i]]);
+            }
+          }
+
+          time -= step;
+          if (time < 0) {
+            setText(str.join(""));
+            clearInterval(intervalId);
+          }
+        }, step * 1000);
+      }
+
+      function charPad(size, char) {
+        return Array.apply(null, Array(size))
+          .map(String.prototype.valueOf, char)
+          .join("");
+      }
+
+      function textPad(size, padChar, text) {
+        let s = Math.round((size - text.length) / 2);
+        let o = size - s - text.length;
+        let left = charPad(s, padChar);
+        let right = charPad(o, padChar);
+        return left + text + right;
+      }
+
+      return {
+        start: function (text) {
+          text = textPad(10, " ", text);
+          let left = text.split("").map(function (v, i) {
+            return i * 0.2 + 0.2;
+          });
+          left = left.slice(0, Math.ceil(left.length / 2));
+          let right = Array.prototype.slice.call(left).reverse();
+          animStr(text.split(""), [].concat(left, right));
+        },
+      };
+    })(document);
+
+    let lines = [
+      "Whyd",
+      "you click",
+      "here",
+      "you dont",
+      "listen",
+      "now youre",
+      "cursed LOL",
+    ];
+
+    let progress = 0;
+    setInterval(function () {
+      Pix.start(lines[progress % lines.length]);
+      progress++;
+    }, 1500);
+  </script>
+</html>
